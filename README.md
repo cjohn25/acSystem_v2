@@ -7,3 +7,7 @@ npm install
 
 2.) 
 copy and paste .env.example, then remove extension .example
+
+3.) 
+composer update
+to create a vendor folder with dependencies
