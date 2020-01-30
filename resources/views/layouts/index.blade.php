@@ -8,7 +8,7 @@
 	@include('links.headLink')
 	{{-- end link --}}
 </head>
-<body class="page-body page-fade">
+<body class="page-body">
 	<div class="page-container">	
 	{{-- <div class="main-content"> --}}
 			<div class="">
