@@ -1,8 +1,8 @@
 			<header class="logo-env">
 			    <!-- logo -->
-			    <div class="logo">
+			    <div class="logo" >
 			        <a href="/">
-			            <img src="{{asset('assets/images/logo1.png')}}" alt="" />
+			            <img src="{{asset('assets/images/logo_ac.png')}}" alt=""  style="height:170px ;width:180px ;"/>
 			        </a>
 			    </div>
 			    <!-- logo collapse icon -->

@@ -38,7 +38,7 @@ class RoomController extends Controller
         $data = DB::table('rooms')
         ->join('device', 'rooms.device_ID', '=', 'device.device_ID') 
         ->select('rooms.*','device.name')
-        ->where('isDeleted','=',0)->paginate(5);
+        ->where('isDeleted','=',0)->paginate(5); 
         return view('pages.rooms.view', ['roomsData' => $data, 'rooms' => $rooms]); 
         // echo url()->current();
         // echo url()->full();

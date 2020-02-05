@@ -25,7 +25,7 @@
             <div class="container">
                 
                 
-        <img src="assets/images/logo1.png" >
+        <img src="assets/images/logo_ac.png"  style="height:45px ;width:55px ;" >
                 <a class="navbar-brand" href="{{ url('/') }}" style="color:#c8c8c8;">
                     {{ config('app.name', 'AC System') }}
                 </a>

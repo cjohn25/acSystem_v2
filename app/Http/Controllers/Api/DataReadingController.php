@@ -36,8 +36,7 @@ class DataReadingController extends Controller
         ->join('users', 'data_reading.user_ID', '=', 'users.id')
         ->select('data_reading.*','device.name','rooms.roomName','users.Name')
         ->orderBy('data_reading.created_at','desc')
-        ->paginate(20);
-        echo $getDataReading;
+        ->paginate(20); 
         $rooms =Room::all()->where('status','=',true);
         return view('pages.dataReading.list', ['device' => $getDataReading,'rooms'=>$rooms  ]);
     }

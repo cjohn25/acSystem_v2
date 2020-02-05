@@ -86,8 +86,10 @@
         </thead>
         <tbody>
             <tr>
+                
                 @if(count($roomsData) > 0)
                 @foreach ($roomsData as $item)
+                 
                 <td>
                     <h5>{{$item->roomName}}</h5>
                 </td>
@@ -133,14 +135,11 @@
                             class="btn btn-success btn-sm btn-icon icon-left">
                             <i class="entypo-shareable"></i>
                             SHOW
-                        </a>
-                        {{-- <a href="rooms/Show/{{$item->room_ID}}" class="btn btn-success btn-sm btn-icon icon-left">
-                        <i class="entypo-shareable"></i>
-                        Show{{$item->room_ID}}
-                        </a> --}}
+                        </a> 
                     </form>
                 </td>
             </tr>
+              
             @endforeach
             @else
             <td>

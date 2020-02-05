@@ -300,9 +300,9 @@
         var getTotalVoltage = 0;
 
         var getTotalTotalWatts = 0;
-        setInterval(function () {
-            callback(getTotalTotalWatts, getTotalVoltage);
-        }, 5000);
+        // setInterval(function () {
+        //     callback(getTotalTotalWatts, getTotalVoltage);
+        // }, 10000);
 
 
         function callback(response, response1) {
@@ -310,6 +310,7 @@
             // drawGauge2(response1);
         }
         getChart();
+        
 
         function getChart() {
             

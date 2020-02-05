@@ -268,7 +268,7 @@
                             <div class="col-sm-5">
                                 <div class="input-group">
                                     <input type="text" class="form-control timepicker" data-template="dropdown"
-                                        data-show-seconds="true" data-show-meridian="true" data-default-time="7:25 AM"
+                                        data-show-seconds="true" data-show-meridian="true" data-default-time="7:00 AM"
                                         data-minute-step="5" data-second-step="5" id="timeInModal" name="timeInModal"> 
                                     <div class="input-group-addon">
                                         <a href="#"><i class="entypo-clock"></i>
@@ -284,7 +284,7 @@
                             <div class="col-sm-5">
                                 <div class="input-group">
                                     <input type="text" class="form-control timepicker" data-template="dropdown"
-                                        data-show-seconds="true" data-show-meridian="true" data-default-time="7:25 AM"
+                                        data-show-seconds="true" data-show-meridian="true" data-default-time="7:00 AM"
                                         data-minute-step="5" data-second-step="5" id="timeOutModal" name="timeOutModal">
                                     <div class="input-group-addon">
                                         <a href="#"><i class="entypo-clock"></i>

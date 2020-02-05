@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'AirconControllerSystem') }}</title>
-    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/logo1.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/logo_ac.png">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('plugins/font-awesome/css/fontawesome-all.css') }}" rel="stylesheet">
 

@@ -69,7 +69,7 @@
 			<!-- Footer -->
 			<footer class="main">
 					<div class="text-center">
-							&copy; 2018 <strong> Admin Theme by Pabz</strong>		
+						&copy; 2020 <strong> Admin Theme by Pabz</strong>		
 				</div>	
 			</footer>	
 		</div>

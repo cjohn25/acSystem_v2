@@ -178,6 +178,7 @@ return [
         MaddHatter\LaravelFullcalendar\ServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
         Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
+        Barryvdh\Debugbar\ServiceProvider::class,
     ],
 
     /*
@@ -232,6 +233,7 @@ return [
         'Calendar' => MaddHatter\LaravelFullcalendar\Facades\Calendar::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'Lava' => Khill\Lavacharts\Laravel\LavachartsFacade::class,
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,
     ],
 
 ];
