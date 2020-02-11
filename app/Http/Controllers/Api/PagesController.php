@@ -178,106 +178,50 @@ class PagesController extends Controller
     }
     public function getDataForDashboard()
     { 
-        $data = Room::where('id','>',0)->get(); 
-        $getData = [];
-        foreach($data as $da)
-        {
-            $getData[] =Data_reading::where('room_ID','=',$da->id)->orderBy('data_reading.created_at','desc')->get(); // qng anu ang latest "desc" 
-        } 
+        
+        $collectionSample = new Collection(); 
+        $collectionByDays = new Collection();  
+        $collection1 = new Collection();  
+        $collection2 = new Collection(); 
+        $collectionSample = Room::where('id','>',0)->get();  
+        $RoomDataCollection = new Room(); 
+        $RoomDataCollection = Arr::pluck($collectionSample, 'id'); 
+        $getData =Data_reading::where('room_ID','=',$RoomDataCollection)->orderBy('data_reading.created_at','desc')->get(); 
+        $getDataLimit= $getData->chunk(100);
+        $getCountLength =count(Arr::pluck($getDataLimit, '0'));   
 
-        // $getRoomData = [];
-        // foreach($getData as $sat){
-        //     $getRoomData[] =Room::where('id','=',$sat->room_ID)->first();
-        // }
-        $getCountLength = '';
-        $getTotal = '';
-        $collection = new Collection(); 
-        foreach($getData as $dd)
-        {
-            $collection[] = $dd;  
-            $getCountLength = count($dd); 
-            foreach($dd as $coll)
-            { 
-                $getTotal =$coll->sum('power'); 
-                // $getWatts->TotalVoltage = ($coll->sum('voltage'));
-            }
-       
-        }  
-        $days = DB::table('data_reading')  
+        $getTotalPowerFromGETDATA =$getDataLimit->sum('power');  
+        $getTotalVoltageFromGETDATA = $getDataLimit->sum('voltage');
+        //Days
+        $collectionByDays = DB::table('data_reading')  
         ->selectRaw('data_reading.*,created_at') 
         ->whereRaw('created_at between DATE_SUB("2019-1-1 08:07:22", INTERVAL 15 MINUTE) and NOW()')->get()
          ->groupBy(function ($val) {
             return Carbon::parse($val->created_at)->format('d/h');//d is for day// i change to h is define to hour
-        }); 
-
-        $collection1 = new Collection();  
-        $collection2 = new Collection(); 
-        $getCountLength=[];
-        $getDateCollection = [];  
-        foreach($days as $item)
-        {
-            $collection1[] = $item->sum('power')/count($item);
-            $collection2[] = $item; 
-            $getCountLength = count($item);
-        }   
-
+        });  
+        
+        $collectionByDaysLimit = $collectionByDays->chunk(100);
+        $collection1 = $collectionByDaysLimit->sum('power')/count(Arr::pluck($collectionByDaysLimit,'0'));
+        $getCountCollectionByDays = count(Arr::pluck($collectionByDaysLimit,'0')); 
         $getWatts = new wattsAndPower(); 
-        $getWatts->TotalWatts =$getTotal; 
-        $getWatts->TotalVoltage = ($collection->sum('voltage'));
+         
+        $getWatts->TotalWatts =$getTotalPowerFromGETDATA; 
+        $getWatts->TotalVoltage = $getTotalVoltageFromGETDATA;
 
         $getWatts->parseTotalVoltage = $collection1;
-        $getWatts->getData = $collection2;
-        $getWatts->collection1 = $collection;
-        $getWatts->collectionDate =Arr::pluck($collection2, '0.created_at');
-        $getWatts->getRoomData = $data;
-        return response()->json($getWatts); 
-    }
-
-    // public function getGuageForDashboard(Request $request)
-    // {  
-    //      $data = Room::where('id','>',0)
-    //     ->orderBy('rooms.created_at','desc')->get(); 
-    //     $getData = [];
-    //     foreach($data as $da)
-    //     {
-    //         $getData[] =Data_reading::where('room_ID','=',$da->id)
-    //         ->whereBetween('created_at', ['2019-01-1 08:07:22', now()->addDays(7)])
-    //         ->orderBy('data_reading.created_at','desc')->first(); // qng anu ang latest "desc" 
-    //     }
-    //     $collection = new Collection(); 
-    //     foreach($getData as $dd)
-    //     {
-    //         $collection[] = $dd; 
-    //     } 
-    //     $getWatts = new wattsAndPower();
-    //     $getTotalVoltage = $collection->sum('voltage');
-    //     $getTotalWatts =$collection->sum('power');
-    //     $getWatts->TotalWatts = $getTotalWatts;
-    //     $getWatts->TotalVoltage = $getTotalVoltage; 
- 
-    //     $days = Data_reading::whereBetween('created_at', ['2019-01-1 08:07:22', now()->addDays(7)])
-    //     ->orderBy('created_at')
-    //     ->get()
-    //     ->groupBy(function ($val) {
-    //         return Carbon::parse($val->created_at)->format('d');//d is for day// i change to h is define to hour
-    //     });
+        $getWatts->getData = $collectionByDaysLimit;
+        $getWatts->collection1 = $getDataLimit;
+        $getWatts->collectionDate =Arr::pluck($collectionByDaysLimit, '0.created_at');
+        $getWatts->getRoomData = $collectionSample;
         
-    //     $collection1 = new Collection();  
-    //     $collection2 = new Collection(); 
-    //     foreach($days as $item)
-    //     {
-    //         $collection1[] = $item->sum('power');
-    //     }
-    //     foreach($collection1 as $itemData)
-    //     {
-    //         $collection2[] = $itemData;
-    //     }
-    //     $getWatts->parseTotalVoltage = $collection1;
-    //     return response()->json($getWatts);  
-    // }
-//    public function getGuageForDashboard_Post(Request $request)
-//     {    
-//     }
+        return response()->json($getWatts); 
+ 
+    }
+ 
+
+
+
+
     private function DateFrom($dataFrom){
         return Carbon::parse($dataFrom)
         ->startOfDay()        // 2018-09-29 00:00:00.000000

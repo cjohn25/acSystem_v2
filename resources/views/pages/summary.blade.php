@@ -178,14 +178,14 @@
 
         $(function () {
             $("#datepicker").datepicker();
-            $("#datepicker2").datepicker();
-
+            $("#datepicker2").datepicker(); 
         });
         //Per hour Average
         var getDataforChart = [];
         var ctx = document.getElementById('myChart');
 
         function myChartDisplay(data1) {
+            confirmation = true;
             console.log(data1);
             // getData.push(data.parseTotalVoltage);  
             var myChart = new Chart(ctx, {
@@ -297,16 +297,26 @@
         //     var chart = new google.visualization.Gauge(document.getElementById('gauge_div2'));
         //     chart.draw(data, gaugeOptions2);
         // }
+
         var getTotalVoltage = 0;
 
-        var getTotalTotalWatts = 0;
-        // setInterval(function () {
-        //     callback(getTotalTotalWatts, getTotalVoltage);
-        // }, 10000);
+        var getTotalTotalWatts = 0; 
+        var confirmation = false; 
+        
+        setInterval(function () {
+            if(confirmation == true){
 
+                callback(getTotalTotalWatts, getTotalVoltage);
+            }
+            else{
 
+            }
+            
+        }, 1000);
+       
         function callback(response, response1) {
             drawGauge(response);
+
             // drawGauge2(response1);
         }
         getChart();

@@ -69,6 +69,7 @@
 			<!-- Footer -->
 			<footer class="main">
 					<div class="text-center">
+						<br><br><br><br><br><br><br><br>
 						&copy; 2020 <strong> Admin Theme by Pabz</strong>		
 				</div>	
 			</footer>	

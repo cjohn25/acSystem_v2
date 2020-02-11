@@ -46,8 +46,8 @@ class RoomController extends Controller
     } 
 
     public function create()
-    {
-        //
+    { 
+        
         $data = Room::all()->where('status','=',true);
         $device = Device::all()->where('Installed','=',true); 
         return view('pages.rooms.add')->with([
