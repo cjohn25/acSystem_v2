@@ -53,12 +53,17 @@
 
     <div class="panel-body">
         <div class="col-md-12">
-            <div class="chart-container" style="position: relative; height:80vh; width:75vw">
-
+            <div class="chart-container" id="myChartBarContainer" >
+                <canvas id="myChartBar"></canvas>
+            </div>
+        </div>
+        <div class="col-md-12" style="height:100px;"><br><br><br><br></div>
+        <div class="col-md-12">
+            <div class="chart-container" id="myChartContainer" style="position: relative;height:80vh; width:75vw">
+                
                 <canvas id="myChart"></canvas>
             </div>
         </div>
-
         <div class="tab-content">
             <div class="tab-pane" id="area-chart">
                 <div id="area-chart-demo" class="morrischart" style="height: 300px"></div>
@@ -78,144 +83,35 @@
 <script src="{{asset('assets/js/guage/loader.js')}}"></script>
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        //     // Area Chart
-        //     var sampleTags = [];
-        //     var dateDate = [];
-        //     var count = 0;
-        //     @foreach($dataReading as $dataR)
-        //     sampleTags.push('{{ $dataR->id }}');
-        //     dateDate.push('{{ $dataR->created_at}}');
-        //     count++;
-        //     @endforeach
-
-        //     function data(offset) {
-        //         var ret = [];
-        //         if (count < 8) {
-        //             for (var x = 1; x < count; x++) {
-        //                 // var v = (offset + x) % 360;
-        //                 ret.push({
-        //                     y: dateDate[x],
-        //                     a: sampleTags[x],
-        //                     b: x
-        //                 });
-        //             }
-        //         } else {
-        //             for (var x = 1; x < 8; x++) {
-        //                 // var v = (offset + x) % 360;
-        //                 ret.push({
-        //                     y: dateDate[x],
-        //                     a: sampleTags[x],
-        //                     b: x
-        //                 });
-        //             }
-        //         }
-        //         return ret;
-        //     }
-
-        //     var area_chart_demo = $("#area-chart-demo");
-        //     area_chart_demo.parent().show();
-        //     var area_chart = Morris.Area({
-        //         element: 'area-chart-demo',
-        //         data: data(0),
-        //         // [ 
-        //         // {
-        //         //     y: '2006',
-        //         //     a: {{count($dataReading)}},
-        //         //    
-        //         // },
-        //         // {
-        //         //     y: '2007',
-        //         //     a: 5,
-        //         //     b: 2
-        //         // },
-        //         // {
-        //         //     y: '2008',
-        //         //     a: 15,
-        //         //     b: 5
-        //         // },
-        //         // {
-        //         //     y: '2009',
-        //         //     a: 2,
-        //         //     b: 5
-        //         // },
-        //         // {
-        //         //     y: '2010',
-        //         //     a: 6,
-        //         //     b: 22
-        //         // },
-        //         // {
-        //         //     y: '2011',
-        //         //     a: 9,
-        //         //     b: 1
-        //         // },
-        //         // {
-        //         //     y: '2012',
-        //         //     a: 10,
-        //         //     b: 5
-        //         // }
-        //         // ],
-        //         xkey: 'y',
-        //         ykeys: ['a', 'b'],
-        //         labels: ['Series A', 'Series B'],
-        //         lineColors: ['#303641', '#576277']
-        //     });
-
-        //     area_chart_demo.parent().attr('style', '');
-        //     //sparkling charts
-        //     $('.pageviews').sparkline('html', {
-        //         type: 'bar',
-        //         height: '30px',
-        //         barColor: '#ff6264'
-        //     });
-        //     $('.uniquevisitors').sparkline('html', {
-        //         type: 'bar',
-        //         height: '30px',
-        //         barColor: '#00b19d'
-        //     });
-        // });
-
-
+    $(document).ready(function () { 
         $(function () {
             $("#datepicker").datepicker();
             $("#datepicker2").datepicker(); 
         });
         //Per hour Average
         var getDataforChart = [];
-        var ctx = document.getElementById('myChart');
 
-        function myChartDisplay(data1) {
-            confirmation = true;
-            console.log(data1);
+
+        // var ctxbar = document.getElementById('myChartBar');
+        document.getElementById("myChartBarContainer").innerHTML = '&nbsp;';
+        document.getElementById("myChartBarContainer").innerHTML = '<canvas id="myChartBar"></canvas>';
+        var ctxbar = document.getElementById("myChartBar").getContext("2d");
+        // myChartDisplayBar();
+        function myChartDisplayBar(data) {
+            confirmation = true; 
             // getData.push(data.parseTotalVoltage);  
-            var myChart = new Chart(ctx, {
-                type: 'line',
+            var myChart = new Chart(ctxbar, {
+                type: 'bar',
                 data: {
                     // labels: ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'],
-                    labels: data1.collectionDate,
+                    labels: data.collectionDate_BarType,
                     datasets: [{
                         label: 'Watts',
-                        data: data1.parseTotalVoltage != '' ? data1.parseTotalVoltage : 0,
-                        // data:getDataforChart,
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        // [
-                        //     'rgba(255, 99, 132, 0.2)',
-                        //     'rgba(54, 162, 235, 0.2)',
-                        //     'rgba(255, 206, 86, 0.2)',
-                        //     'rgba(75, 192, 192, 0.2)',
-                        //     'rgba(153, 102, 255, 0.2)',
-                        //     'rgba(255, 159, 64, 0.2)'
-                        // ],
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        // [
-                        //     'rgba(255, 99, 132, 1)',
-                        //     'rgba(54, 162, 235, 1)',
-                        //     'rgba(255, 206, 86, 1)',
-                        //     'rgba(75, 192, 192, 1)',
-                        //     'rgba(153, 102, 255, 1)',
-                        //     'rgba(255, 159, 64, 1)'
-                        // ],
-                        borderWidth: 4
+                        // data:  [0,100],
+                        data:data.getDataforBarChart != '' ? data.getDataforBarChart : 0, 
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)', 
+                        borderColor: 'rgba(255, 99, 132, 1)', 
+                        borderWidth: 3
                     }]
                 },
                 options: {
@@ -229,6 +125,42 @@
                 }
             });
         }
+
+  
+
+        document.getElementById("myChartContainer").innerHTML = '&nbsp;';
+        document.getElementById("myChartContainer").innerHTML = '<canvas id="myChart"></canvas>';
+        var ctx = document.getElementById("myChart").getContext("2d");
+        function myChartDisplay(data1) {
+            confirmation = true;
+            console.log(data1);
+            // getData.push(data.parseTotalVoltage);  
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    // labels: ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'],
+                    labels: data1.collectionDate,
+                    datasets: [{
+                        label: 'Watts',
+                        data: data1.parseTotalVoltage != '' ? data1.parseTotalVoltage : 0,
+                        // data:getDataforChart,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)', 
+                        borderColor: 'rgba(255, 99, 132, 1)', 
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+        }
+        
         //Weekly Average
 
         function showChart() {
@@ -276,27 +208,7 @@
             var chart = new google.visualization.Gauge(document.getElementById('gauge_div'));
             chart.draw(data, options);
         }
-
-        // function drawGauge2(response1) {
-        //     var num = 0;
-        //     num = parseInt(response1) != NaN ? parseInt(response1) : 0;
-        //     var data = google.visualization.arrayToDataTable([
-        //         ['Label', 'Value'],
-        //         ['Voltage', num]
-        //     ]);
-
-        //     var gaugeOptions2 = {
-        //         min: 0,
-        //         max: 240,
-        //         yellowFrom: 200,
-        //         yellowTo: 230,
-        //         redFrom: 230,
-        //         redTo: 280,
-        //         minorTicks: 5
-        //     };
-        //     var chart = new google.visualization.Gauge(document.getElementById('gauge_div2'));
-        //     chart.draw(data, gaugeOptions2);
-        // }
+ 
 
         var getTotalVoltage = 0;
 
@@ -304,15 +216,13 @@
         var confirmation = false; 
         
         setInterval(function () {
-            if(confirmation == true){
-
+            if(confirmation == true){ 
                 callback(getTotalTotalWatts, getTotalVoltage);
             }
-            else{
-
+            else{ 
             }
             
-        }, 1000);
+        }, 5000);
        
         function callback(response, response1) {
             drawGauge(response);
@@ -339,6 +249,7 @@
                 success: function (data) {
                     console.log(data);
                     myChartDisplay(data);
+                    myChartDisplayBar(data);
                     getTotalVoltage = data.TotalVoltage;
                     getTotalTotalWatts = data.TotalWatts;
 
@@ -359,34 +270,37 @@
 
 
         $('#setupScheduleForm').on('submit', function (e) {
-
-            e.preventDefault();
-
-            var form_data = $(this).serialize();
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                data: form_data,
-                url: '/summary/dataPost',
-                type: "POST",
-                dataType: 'json',
-                success: function (data) {
-                    console.log(data);
-                    myChartDisplay(data);
-        // $getWatts->parseTotalVoltage = $collection1;
-        //             for(var x= 0 ; x< data.){
-
-        //             }
-                    getTotalVoltage = data.TotalVoltage;
-                    getTotalTotalWatts = data.TotalWatts;
-                },
-                error: function (data) {
-                    console.log('Error:', data);
-                }
-            });
+            if($('#datepicker').val() != '' &&  $('#datepicker2').val() != '' && $('#selectRoom').val() != ''){
+                e.preventDefault(); 
+                    var form_data = $(this).serialize();
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    $.ajax({
+                        data: form_data,
+                        url: '/summary/dataPost',
+                        type: "POST",
+                        dataType: 'json',
+                        success: function (data) {
+                            console.log(data);
+                            myChartDisplay(data); 
+                            myChartDisplayBar(data);//display for Bar type 
+                            getTotalVoltage = data.TotalVoltage; // for guage
+                            getTotalTotalWatts = data.TotalWatts; // for guage
+                        },
+                        error: function (data) {
+                            console.log('Error:', data);
+                        }
+                    });
+              
+            }
+            else {
+  
+                alert('Room and Date cannot be empty');
+            }
+   
         });
     });
 
