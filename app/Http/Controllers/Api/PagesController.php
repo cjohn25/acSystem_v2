@@ -147,7 +147,9 @@ class PagesController extends Controller
                     $getFilterDataDaysAndHours[]= $daysItem->sum('power'); 
             } 
                 //Start Overall Total
-                $getWatts->TotalWatts = array_sum($getFilterDataDaysAndHours)/1000;   // complete from 1 to until now  
+                $getWatts->TotalWatts = ((array_sum($getFilterDataDaysAndHours)/1000)*count(Arr::pluck($daysAndHours, '0.created_at'))*24);   // complete from 1 to until now  
+                
+        // $getWatts->TotalWatts =(($getTotalPowerFromGETDATA/1000)*count(Arr::pluck($collectionByDaysOnly, '0.created_at'))*24); 
                 $getWatts->TotalVoltage = 220;      
                 //End Overall Total without parsing data  
             $getWatts->parseTotalVoltage =  $getFilterDataDaysAndHours;
@@ -199,11 +201,11 @@ class PagesController extends Controller
         ->selectRaw('data_reading.*,created_at') 
         ->whereRaw('created_at between DATE_SUB("2019-1-1 08:07:22", INTERVAL 15 MINUTE) and NOW()')->get() 
         ->groupBy(function ($val) {
-           return Carbon::parse($val->created_at)->format('d/h');//d is for day// i change to h is define to hour
+           return Carbon::parse($val->created_at)->format('d');//d is for day// i change to h is define to hour
         }); 
 
         $getWatts = new wattsAndPower();       
-        $getWatts->TotalWatts =$getTotalPowerFromGETDATA/1000;  // complete from 1 to until now  
+        $getWatts->TotalWatts =(($getTotalPowerFromGETDATA/1000)*count(Arr::pluck($collectionByDaysOnly, '0.created_at'))*24);  // complete from 1 to until now  
         $getWatts->TotalVoltage = 220; 
         
         $collectionDateDays = new Collection();
@@ -228,8 +230,8 @@ class PagesController extends Controller
         {
             $getFilterDataDaysOnly[] = $item->sum('power');
         }
-        $getWatts->getDataforBarChart =$getFilterDataDaysOnly;
-        // $getWatts->daysDataOnly = $collectionByDaysOnly;
+        // $getNumberOfDaysAndMultiply = count(Arr::pluck($collectionByDaysOnly, '0.created_at'))*24;
+        $getWatts->getDataforBarChart =$getFilterDataDaysOnly;   
         $getWatts->collectionDate_BarType = Arr::pluck($collectionByDaysOnly, '0.created_at'); 
         //End Display for Bar Type
  

@@ -194,7 +194,7 @@
             num = parseInt(response) != NaN ? parseInt(response) : 0;
             var data = google.visualization.arrayToDataTable([
                 ['Label', 'Value'],
-                ['Watts', num]
+                ['Total Watts', num]
             ]);
             var options = {
                 min: 0,
@@ -233,39 +233,35 @@
         
 
         function getChart() {
-            
-        var selOpts="";
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            var getDataRoom = [];
-            var getDataRoomSet = "";
-            $.ajax({
-                url: '/summary/data',
-                type: "GET",
-                dataType: 'json',
-                success: function (data) {
-                    console.log(data);
-                    myChartDisplay(data);
-                    myChartDisplayBar(data);
-                    getTotalVoltage = data.TotalVoltage;
-                    getTotalTotalWatts = data.TotalWatts;
+            var selOpts="";
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                var getDataRoom = [];
+                var getDataRoomSet = "";
+                $.ajax({
+                    url: '/summary/data',
+                    type: "GET",
+                    dataType: 'json',
+                    success: function (data) {
+                        console.log(data);
+                        myChartDisplay(data);
+                        myChartDisplayBar(data);
+                        getTotalVoltage = data.TotalVoltage;
+                        getTotalTotalWatts = data.TotalWatts;
 
-                    for (var i = 0; i < data.getRoomData.length; i++) {
-                        // getDataRoom.push(data.getRoomData[i]);
-                        
-                    selOpts += "<option value='" + data.getRoomData[i]['id'] + "'>" + data.getRoomData[i]['roomName'] + "</option>";
-                    } 
-                    // console.log(selOpts);  
-                    $('#selectRoom').append(selOpts);
-                    // callback(data.TotalVoltage, data.TotalWatts);
-                },
-                error: function (data) {
-                    console.log('Error:', data);
-                }
-            });
+                        for (var i = 0; i < data.getRoomData.length; i++) { 
+                        selOpts += "<option value='" + data.getRoomData[i]['id'] + "'>" + data.getRoomData[i]['roomName'] + "</option>";
+                        } 
+                        $('#selectRoom').append(selOpts);
+                        // callback(data.TotalVoltage, data.TotalWatts);
+                    },
+                    error: function (data) {
+                        console.log('Error:', data);
+                    }
+                });
         }
 
 
