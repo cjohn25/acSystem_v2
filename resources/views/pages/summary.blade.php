@@ -11,7 +11,7 @@
     <i class="entypo-gauge"></i> SUMMARY
 </p>
 {{-- <form action="{{route('showDashboard')}}" method="POST"> --}}
-
+  
 <form id="setupScheduleForm" name="setupScheduleForm" role="form" class="form-horizontal form-groups-bordered">
     {{-- @csrf --}}
     <div class="col-md-12" style="height: 100px">
@@ -52,6 +52,9 @@
 
 
     <div class="panel-body">
+        <div id="checkData">
+            <div class="loader"></div>
+        </div>
         <div class="col-md-12">
             <div class="chart-container" id="myChartBarContainer" >
                 <canvas id="myChartBar"></canvas>
@@ -84,6 +87,8 @@
 
 <script type="text/javascript">
     $(document).ready(function () { 
+        
+        $('#checkData').show();
         $(function () {
             $("#datepicker").datepicker();
             $("#datepicker2").datepicker(); 
@@ -256,6 +261,9 @@
                         selOpts += "<option value='" + data.getRoomData[i]['id'] + "'>" + data.getRoomData[i]['roomName'] + "</option>";
                         } 
                         $('#selectRoom').append(selOpts);
+                        if(data != null){
+                            $('#checkData').hide();
+                        }
                         // callback(data.TotalVoltage, data.TotalWatts);
                     },
                     error: function (data) {
