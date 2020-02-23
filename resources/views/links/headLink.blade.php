@@ -7,11 +7,12 @@
 	<link rel="stylesheet" href="{{asset('assets/css/customStyle.css')}}"  id="style-resource-6">
 	<script src="{{asset('assets/js/jquery-1.10.2.min.js')}}"></script> 
 	<link rel="stylesheet" href="{{asset('assets/css/fullcalendar2.min.css')}}"  id="style-resource-19">
-	{{-- <link rel="stylesheet" href="{{asset('assets/css/neon-theme.css')}}" id="style-resource-20"> --}}
+	<link rel="stylesheet" href="{{asset('assets/css/neon-theme.css')}}" id="style-resource-20">
 	
 	<link rel="stylesheet" href="{{asset('assets/css/highcartsStyle.css')}}" id="style-resource-20">
  
 	
+	<link rel="stylesheet" href="{{asset('assets/css/font-awesome.min.css')}}" id="style-resource-21">
 	{{-- <script src="{{asset('assets/js/guage/loader.js')}}"></script>  --}}
 	{{-- <link rel="stylesheet" href="{{asset('assets/js/guage/charts/gstatic/44/css/core/tooltip.css')}}" id="style-resource-7">
 	<link rel="stylesheet" href="{{asset('assets/js/guage/charts/gstatic/44/css/util/util.css')}}" id="style-resource-8"> --}}

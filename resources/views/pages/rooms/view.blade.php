@@ -19,6 +19,7 @@
 <div class="col-md-12">
     <div class="col-md-4">
         <form action="search" method="POST" role="search">
+            
             {{ csrf_field() }}
             <div class="input-group">
                 <input type="text" class="form-control" name="search" placeholder="Search Name"> <span
@@ -215,6 +216,14 @@
         $(".delete").on("submit", function(){
             return confirm("Are you sure?");
         }); 
+
+
+
+        
+
+        // $('#search').on('submit', function (e) {
+        //     alert('testing');
+        // });
     });
 </script>
-@endsection
+@endsection 

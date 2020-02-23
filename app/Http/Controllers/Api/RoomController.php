@@ -203,23 +203,46 @@ class RoomController extends Controller
         echo $searchData;
     }
     public function searchRoom(Request $request)
-    {
-        try
-        {
+    { 
+        try{
+
             $search = $request->input('search');
             $data = Room::all()->where('status','=',true);
-            $results =  Room::where('roomName', 'like', '%' . $search . '%')
-                            ->where('routeName', 'like', '%' . $search . '%')
-                            ->join('device', 'rooms.device_ID', '=', 'device.device_ID')
-                            // $role = Role::findorFail();
+                  $results =  Room::where('roomName', 'like', '%' . $search . '%')
+                            ->orWhere('routeName', 'like', '%' . $search . '%') 
+                            ->join('device', 'rooms.device_ID', '=', 'device.device_ID') 
                             ->select('rooms.*','device.name')
                             ->where('isDeleted', '=', 0)->paginate(5);
+
+    //   $results =  Room::where('roomName', 'like', '%' . $search . '%')
+    //                         ->where('routeName', 'like', '%' . $search . '%')
+    //                         ->join('device', 'rooms.device_ID', '=', 'device.device_ID')
+    //                         // $role = Role::findorFail();
+    //                         ->select('rooms.*','device.name')
+    //                         ->where('isDeleted', '=', 0)->paginate(5);
             return view('pages.rooms.view')->with([
                 'rooms' => $data,
                 'roomsData' => $results
-            ]);               }
-        catch(Exception $e){ 
-        } 
+            ]);   
+        }catch(Exception $e){
+
+        }
+        // try
+        // {
+        //     $search = $request->input('search');
+        //     $data = Room::all()->where('status','=',true);
+        //     $results =  Room::where('roomName', 'like', '%' . $search . '%')
+        //                     ->where('routeName', 'like', '%' . $search . '%')
+        //                     ->join('device', 'rooms.device_ID', '=', 'device.device_ID')
+        //                     // $role = Role::findorFail();
+        //                     ->select('rooms.*','device.name')
+        //                     ->where('isDeleted', '=', 0)->paginate(5);
+        //     return view('pages.rooms.view')->with([
+        //         'rooms' => $data,
+        //         'roomsData' => $results
+        //     ]);               }
+        // catch(Exception $e){ 
+        // } 
     }
  
     public function showRoom($id)

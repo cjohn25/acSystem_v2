@@ -52,6 +52,7 @@ Route::group(['middleware' => ['auth', 'admin']], function()
 //search  
   Route::resource('rooms','Api\RoomController')->middleware('auth');
   Route::post('search', 'Api\RoomController@searchRoom');
+  // Route::post('room/search', 'Api\RoomController@searchRoom');
 //Summary
   Route::post('showSummary', 'Api\PagesController@showDashboard')->name('showDashboard')->middleware('auth');
 //summary

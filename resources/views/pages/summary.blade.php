@@ -39,7 +39,13 @@
             </div>
 
             {{-- <p>Date: <input type="text" id="datepicker"></p> --}}
-
+            {{-- <div class="form-group"> <label class="col-sm-3 control-label">Date Range w/ Predefined Ranges</label>
+                <div class="col-sm-5">
+                    <div class="daterange daterange-inline add-ranges active" data-format="MMMM D, YYYY"
+                        data-start-date="February 8, 2020" data-end-date="March 3, 2020"> <i
+                            class="entypo-calendar"></i> <span>February 8, 2020 - March 3, 2020</span> </div>
+                </div>
+            </div> --}}
             <div class="col-sm-6">
 
                 <div class="outer1" style="height: 130px !important; ">
@@ -138,7 +144,7 @@
         var ctx = document.getElementById("myChart").getContext("2d");
         function myChartDisplay(data1) {
             confirmation = true;
-            console.log(data1);
+            // console.log(data1);
             // getData.push(data.parseTotalVoltage);  
             var myChart = new Chart(ctx, {
                 type: 'line',
@@ -168,25 +174,25 @@
         
         //Weekly Average
 
-        function showChart() {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            // var rID = $('#roomid').val();
-            $.ajax({
-                url: '/summary/data/',
-                type: "POST",
-                dataType: 'json',
-                success: function (data) {
-                    console.log(data);
-                },
-                error: function (data) {
-                    console.log('Error:', data);
-                }
-            });
-        }
+        // function showChart() {
+        //     $.ajaxSetup({
+        //         headers: {
+        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //         }
+        //     });
+        //     // var rID = $('#roomid').val();
+        //     $.ajax({
+        //         url: '/summary/data/',
+        //         type: "POST",
+        //         dataType: 'json',
+        //         success: function (data) {
+        //             console.log(data);
+        //         },
+        //         error: function (data) {
+        //             console.log('Error:', data);
+        //         }
+        //     });
+        // }
 
 
         google.charts.load('current', {

@@ -29,7 +29,7 @@
 <script src="{{asset('assets/js/calendarLibrary/fullcalendar2.min.js')}}" id="script-resource-25"></script> 
 <script src="{{asset('assets/js/calendarLibrary/neon-calendar-2.js')}}" id="script-resource-26"></script>
 
-<script src="{{asset('assets/js/calendarLibrary/moment.min.js')}}" id="script-resource-27"></script>
+{{-- <script src="{{asset('assets/js/calendarLibrary/moment.min.js')}}" id="script-resource-27"></script> --}}
 <script src="{{asset('assets/js/bootstrap-timepicker.min.js')}}" id="script-resource-28"></script>
 <link rel="stylesheet" href="{{asset('assets/js/icheck/skins/minimal/_all.css')}}" id="style-resource-29">
 
