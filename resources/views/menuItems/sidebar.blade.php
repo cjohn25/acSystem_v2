@@ -75,7 +75,7 @@
 			                <a href="/dataReading"><span>Activity Logs</span></a>
 			            </li>
 			            <li>
-			                <a href="/summary"><span>History</span></a>
+			                <a href="/summary"><span>Summary</span></a>
 			            </li>
 			        </ul>
 			    </li>

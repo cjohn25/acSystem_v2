@@ -38,7 +38,7 @@
     <div class="col-md-12 panel-body">
 
         <form method="POST" action="{{ route('add.DataReading', $item->id)}}">
-            <div class="col-md-6 list-group-item" style="border-color:#303641;border-style:double">
+            <div class="col-md-5 list-group-item" style="border-color:#303641;border-style:double">
                 {{-- diri ko na remove --}}
 
                 {{-- Calendar --}}
@@ -73,7 +73,7 @@
             <input type="hidden" class="form-control" name="voltage" id="voltage" maxlength="6"
                 value={{$item->voltage}}>
             @csrf
-            <div class="col-md-6">
+            <div class="col-md-7">
                 <br>
                 <label for="field-1" class="col-sm-2 control-label">
                     <h4><strong> STATUS:</strong></h4>
@@ -129,6 +129,7 @@
                 <div class="outer">
                     <div id="gauge_div" style="float:left"></div>
                     <div id="gauge_div2" style="float:left"></div>
+                    <div id="gauge_div3" style="float:left"></div>
                 </div>
                 <div align="center">
                     <h3>Energy Consumption</h3>
@@ -205,10 +206,30 @@
         var chart = new google.visualization.Gauge(document.getElementById('gauge_div2'));
         chart.draw(data, gaugeOptions2);
     }
+    function drawGauge3(response2) {
+        var num = 0;
+        num = parseInt(response2) != NaN ? parseInt(response2) : 0;
+        var data = google.visualization.arrayToDataTable([
+            ['Label', 'Value'],
+            ['Current', num]
+        ]);
 
+        var gaugeOptions3 = {
+            min: 0,
+            max: 240,
+            yellowFrom: 200,
+            yellowTo: 230,
+            redFrom: 230,
+            redTo: 280,
+            minorTicks: 5
+        };
+        var chart = new google.visualization.Gauge(document.getElementById('gauge_div3'));
+        chart.draw(data, gaugeOptions3);
+    }
     function callback(response, response1) {
         drawGauge(response);
         drawGauge2(response1);
+        drawGauge3(220);
     }
 
     setInterval(function () {
@@ -234,7 +255,7 @@
                     powerValue = getPowerInput;
                     voltageValue = getVoltageInput;
                 }
-                // console.log(data);
+                console.log(data);
                 callback(powerValue, voltageValue);
             },
             error: function (data) {

@@ -101,18 +101,16 @@ class PagesController extends Controller
     }
 
     public function getDataForDashboard_Post(Request $request)
-    {
-        
-        // $DateFromandTo= explode('_',$request->date); 
+    {  
         $DateFrom = $this->DateFrom(
-            $request->get('datepicker') != null ||  $request->get('datepicker') != '' ? $request->get('datepicker'): '2019-09-1 08:07:22'
+           $request->dateFrom != null ||  $request->dateFrom != '' ? $request->dateFrom: '2019-09-1 08:07:22'
         );
-        $DateFrom = $this->DateFrom(
-            $DateFromandTo != null ||  $DateFromandTo != '' ? $DateFromandTo: now()
+        $DateTo = $this->DateFrom(
+            $request->dateTo != null ||  $request->dateTo != '' ? $request->dateTo: now()
         );
-        // $data =  $this->getSelectRoom(
-        //     $request->room
-        // ); 
+        $data =  $this->getSelectRoom(
+            $request->room
+        ); 
 
         $allRoom = Room::where('id','>',0)   
         ->orderBy('rooms.created_at','desc')
@@ -132,43 +130,47 @@ class PagesController extends Controller
                 ->groupBy(function ($val) {
                   return Carbon::parse($val->created_at)->format('d');//d is for day// i change to h is define to hour
                 });
+        $getTotal_by_room = DB::table('data_reading')->where('room_ID','=',$request->room)
+                ->selectRaw('data_reading.power,created_at')
+                ->whereBetween('created_at', [$DateFrom, $DateTo])->sum('power');
 
         $getWatts = new wattsAndPower();
-    
-         
-        //Start Display for Line Type 
-            $getFilterDataDaysAndHours = []; 
-            
-            foreach($daysAndHours as $key => $daysItem)
-            {  
-                    $getFilterDataDaysAndHours[]= $daysItem->sum('power'); 
-            } 
-                //Start Overall Total
-                $getWatts->TotalWatts = ((array_sum($getFilterDataDaysAndHours)/1000)*24);   // complete from 1 to until now  
-                // $getWatts->TotalWatts =(($getTotalPowerFromGETDATA/1000)*count(Arr::pluck($collectionByDaysOnly, '0.created_at'))*24); 
-                $getWatts->TotalVoltage = 220;      
-                //End Overall Total without parsing data  
-                $getWatts->parseTotalVoltage =  $getFilterDataDaysAndHours;
-                $getWatts->daysDataAndHours = $daysAndHours;
-                $getWatts->collectionDate =Arr::pluck($daysAndHours, '0.created_at');
-        //End Display for Line Type 
- 
 
 
-
-        //Start Display for Bar Type
+        //Start Display for Line Type (HOURLY)
+        $getFilterDataDaysAndHours = [];  
+        foreach($daysAndHours as $key => $daysItem)
+        {  
+            $getFilterDataDaysAndHours[]= $daysItem->sum('power')/count(Arr::pluck($daysItem, '0.power')); 
+        }  
         
+        //Start Overall Total 
+        $getWatts->TotalWatts =(((($getTotal_by_room/60)/24)/1000)*count(Arr::pluck($daysOnly, '0.created_at'))); 
+       //$getWatts->TotalWatts = ((array_sum($getFilterDataDaysAndHours)/1000)*24);   // complete from 1 to until now   
+        $getWatts->TotalVoltage = 220;  
+        //End Overall Total without parsing data  
+
+        // show record to console     
+        $getWatts->showCount = count(Arr::pluck($daysAndHours, '0.created_at'));
+        $getWatts->parseTotalVoltage =  $getFilterDataDaysAndHours;
+        $getWatts->daysDataAndHours = $daysAndHours;
+        $getWatts->collectionDate =Arr::pluck($daysAndHours, '0.created_at'); 
+        //End Display for Line Type  
+
+        //Start Display for Bar Type (DAILY)
         $getFilterDataDaysOnly = [];
         foreach($daysOnly as $key => $item)
         {
-            $getFilterDataDaysOnly[] = $item->sum('power');
+            $getFilterDataDaysOnly[] = ((($item->sum('power')/60)/24)/1000);
         }
         $getWatts->getDataforBarChart =$getFilterDataDaysOnly;
         $getWatts->collectionDate_BarType = Arr::pluck($daysOnly, '0.created_at'); 
-        $getWatts->getRoomData = $allRoom; 
         // End Display for Bar Type
+
+        $getWatts->getSelectedRoom = $data;
+        $getWatts->getRoomData = $allRoom; 
          
-        return response()->json($request); 
+        return response()->json($getWatts); 
     }
     public function getDataForDashboard()
     { 
@@ -176,13 +178,14 @@ class PagesController extends Controller
         $collectionSample = new Collection(); 
         $collectionByDaysAndHours = new Collection();  
         $collectionByDaysOnly = new Collection();  
+        $RoomDataCollection = new Collection();  
+
         $collectionSample = Room::where('id','>',0)->get();  
-        $RoomDataCollection = new Collection(); 
         $RoomDataCollection = Arr::pluck($collectionSample, 'id'); 
         $getData =Data_reading::where('room_ID','=',$RoomDataCollection)->orderBy('data_reading.created_at','desc')->get();  
 
-        $getTotalPowerFromGETDATA =$getData->sum('power'); 
-        $getTotalVoltageFromGETDATA = $getData->sum('voltage');
+        // $getTotalPowerFromGETDATA =$getData->sum('power'); 
+        // $getTotalVoltageFromGETDATA = $getData->sum('voltage');
 
         //Days and Hours
         $collectionByDaysAndHours = DB::table('data_reading')
@@ -201,13 +204,9 @@ class PagesController extends Controller
         }); 
 
         $getWatts = new wattsAndPower();       
-        $getWatts->TotalWatts =(((($getTotalPowerFromGETDATA/60)/24)/1000)*count(Arr::pluck($collectionByDaysOnly, '0.created_at')));  // complete from 1 to until now  
-
-
+        $getWatts->TotalWatts =(((($getData->sum('power')/60)/24)/1000)*count(Arr::pluck($collectionByDaysOnly, '0.created_at')));  // complete from 1 to until now  
         $getWatts->TotalVoltage = 220; 
-        
-        $collectionDateDays = new Collection();
-      
+         
         //Start Display for Line Type (HOURLY)
         $getFilterDataDaysAndHours = [];  
         foreach($collectionByDaysAndHours as $key => $daysItem)

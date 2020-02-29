@@ -11,29 +11,27 @@
     <i class="entypo-gauge"></i> SUMMARY
 </p>
 {{-- <form action="{{route('showDashboard')}}" method="POST"> --}}
-  
+
 <form id="setupScheduleForm" name="setupScheduleForm" role="form" class="form-horizontal form-groups-bordered">
     {{-- @csrf --}}
     <div class="col-md-12" style="height: 100px">
         <div class="form-group">
-            <div class="col-sm-3 input-group">
-
+            <div class="col-sm-2 input-group">
+                {{-- 
                 <p>Date From:
                     <i class="entypo-calendar"></i>
-                    <input type="text" id="datepicker" name="datepicker" class="form-control"></p>
+                    <input type="text" id="datepicker" name="datepicker" class="form-control"></p> --}}
                 <select name="selectRoom" id="selectRoom" class="form-control">
 
-                    <option value="">Select Room</option> 
-                    {{-- @foreach ($getRoomData as $item)
-                <option value="">{{$item}}</option>
-                    @endforeach --}}
+                    <option value="">Select Room</option>
                 </select>
             </div>
 
-            <div class="col-sm-3 input-group">
+            <div class="col-sm-4 input-group">
                 <p>Date To:
                     <i class="entypo-calendar"></i>
-                    <input type="text" id="datepicker2" name="datepicker2" class="form-control"></p>
+                    <input type="text" id="datepicker2" name="datepicker2"
+                        class="daterange daterange-inline add-ranges"></p>
 
                 <input type="submit" class="btn btn-primary" value="APPLY">
             </div>
@@ -55,21 +53,23 @@
             </div>
         </div>
     </div>
-
-
+ 
     <div class="panel-body">
         <div id="checkData">
             <div class="loader"></div>
         </div>
+        <h2>
+        <div id="summaryShow">TOTAL &nbsp;SUMMARY&nbsp; OF &nbsp;<span id="submittername"></span> </div>
+        </h2>
         <div class="col-md-12">
-            <div class="chart-container" id="myChartBarContainer" >
+            <div class="chart-container" id="myChartBarContainer">
                 <canvas id="myChartBar"></canvas>
             </div>
         </div>
         <div class="col-md-12" style="height:100px;"><br><br><br><br></div>
         <div class="col-md-12">
             <div class="chart-container" id="myChartContainer" style="position: relative;height:80vh; width:75vw">
-                
+
                 <canvas id="myChart"></canvas>
             </div>
         </div>
@@ -92,12 +92,13 @@
 <script src="{{asset('assets/js/guage/loader.js')}}"></script>
 
 <script type="text/javascript">
-    $(document).ready(function () { 
-        
+    $(document).ready(function () {
+
         $('#checkData').show();
+        $('#summaryShow').hide();
         $(function () {
             $("#datepicker").datepicker();
-            $("#datepicker2").datepicker(); 
+            // $("#datepicker2").datepicker(); 
         });
         //Per hour Average
         var getDataforChart = [];
@@ -109,7 +110,7 @@
         var ctxbar = document.getElementById("myChartBar").getContext("2d");
         // myChartDisplayBar();
         function myChartDisplayBar(data) {
-            confirmation = true; 
+            confirmation = true;
             // getData.push(data.parseTotalVoltage);  
             var myChart = new Chart(ctxbar, {
                 type: 'bar',
@@ -117,11 +118,11 @@
                     // labels: ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'],
                     labels: data.collectionDate_BarType,
                     datasets: [{
-                        label: 'Watts',
+                        label: 'kWh',
                         // data:  [0,100],
-                        data:data.getDataforBarChart != '' ? data.getDataforBarChart : 0, 
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)', 
-                        borderColor: 'rgba(255, 99, 132, 1)', 
+                        data: data.getDataforBarChart != '' ? data.getDataforBarChart : 0,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
                         borderWidth: 3
                     }]
                 },
@@ -137,11 +138,12 @@
             });
         }
 
-  
+
 
         document.getElementById("myChartContainer").innerHTML = '&nbsp;';
         document.getElementById("myChartContainer").innerHTML = '<canvas id="myChart"></canvas>';
         var ctx = document.getElementById("myChart").getContext("2d");
+
         function myChartDisplay(data1) {
             confirmation = true;
             // console.log(data1);
@@ -155,8 +157,8 @@
                         label: 'Watts',
                         data: data1.parseTotalVoltage != '' ? data1.parseTotalVoltage : 0,
                         // data:getDataforChart,
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)', 
-                        borderColor: 'rgba(255, 99, 132, 1)', 
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
                         borderWidth: 1
                     }]
                 },
@@ -171,7 +173,7 @@
                 }
             });
         }
-        
+
         //Weekly Average
 
         // function showChart() {
@@ -219,98 +221,109 @@
             var chart = new google.visualization.Gauge(document.getElementById('gauge_div'));
             chart.draw(data, options);
         }
- 
+
 
         var getTotalVoltage = 0;
 
-        var getTotalTotalWatts = 0; 
-        var confirmation = false; 
-        
+        var getTotalTotalWatts = 0;
+        var confirmation = false;
+
         setInterval(function () {
-            if(confirmation == true){ 
+            if (confirmation == true) {
                 callback(getTotalTotalWatts, getTotalVoltage);
-            }
-            else{ 
-            }
-            
+            } else {}
+
         }, 5000);
-       
+
         function callback(response, response1) {
             drawGauge(response);
 
             // drawGauge2(response1);
         }
         getChart();
-        
+
 
         function getChart() {
-            var selOpts="";
+            var selOpts = "";
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            var getDataRoom = [];
+            var getDataRoomSet = "";
+            $.ajax({
+                url: '/summary/data',
+                type: "GET",
+                dataType: 'json',
+                success: function (data) {
+                    // console.log(data);
+                    myChartDisplay(data);
+                    myChartDisplayBar(data);
+                    getTotalVoltage = data.TotalVoltage;
+                    getTotalTotalWatts = data.TotalWatts;
+
+                    for (var i = 0; i < data.getRoomData.length; i++) {
+                        selOpts += "<option value='" + data.getRoomData[i]['id'] + "'>" + data
+                            .getRoomData[i]['roomName'] + "</option>";
+                    }
+                    $('#selectRoom').append(selOpts);
+                    if (data != null) {
+                        $('#checkData').hide();
+                    }
+                    // callback(data.TotalVoltage, data.TotalWatts);
+                },
+                error: function (data) {
+                    console.log('Error:', data);
+                }
+            });
+        }
+
+
+        $('#setupScheduleForm').on('submit', function (e) {
+            if ($('#datepicker2').val() != '' && $('#selectRoom').val() != '') {
+                e.preventDefault();
+                var getRoom = $('#selectRoom').val();
+                var datepick = $('#datepicker2').val();
+
+                var array = new Array();
+                array = datepick.split('-');
+                var newDate = (array[0] + "." + array[1]);
+                // console.log(newDate);
+
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
                 });
-                var getDataRoom = [];
-                var getDataRoomSet = "";
                 $.ajax({
-                    url: '/summary/data',
-                    type: "GET",
+                    data: 'dateFrom=' + array[0] + '&dateTo=' + array[1] + '&room=' + getRoom,
+                    url: '/summary/dataPost',
+                    type: "POST",
                     dataType: 'json',
                     success: function (data) {
-                        console.log(data);
+                        // console.log(data);
                         myChartDisplay(data);
-                        myChartDisplayBar(data);
-                        getTotalVoltage = data.TotalVoltage;
-                        getTotalTotalWatts = data.TotalWatts;
+                        myChartDisplayBar(data); //display for Bar type 
+                        getTotalVoltage = data.TotalVoltage; // for guage
+                        getTotalTotalWatts = data.TotalWatts; // for guage
 
-                        for (var i = 0; i < data.getRoomData.length; i++) { 
-                        selOpts += "<option value='" + data.getRoomData[i]['id'] + "'>" + data.getRoomData[i]['roomName'] + "</option>";
-                        } 
-                        $('#selectRoom').append(selOpts);
-                        if(data != null){
-                            $('#checkData').hide();
-                        }
-                        // callback(data.TotalVoltage, data.TotalWatts);
+                        $('#summaryShow').slideDown();
+                        $("#submittername").html($('#selectRoom').find('option:selected')
+                            .text());
+                        // alert($('#selectRoom').find('option:selected').text());
+
                     },
                     error: function (data) {
                         console.log('Error:', data);
                     }
                 });
-        }
 
+            } else {
 
-        $('#setupScheduleForm').on('submit', function (e) {
-            if($('#datepicker').val() != '' &&  $('#datepicker2').val() != '' && $('#selectRoom').val() != ''){
-                e.preventDefault(); 
-                    var form_data = $(this).serialize();
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
-                    $.ajax({
-                        data: form_data,
-                        url: '/summary/dataPost',
-                        type: "POST",
-                        dataType: 'json',
-                        success: function (data) {
-                            console.log(data);
-                            myChartDisplay(data); 
-                            myChartDisplayBar(data);//display for Bar type 
-                            getTotalVoltage = data.TotalVoltage; // for guage
-                            getTotalTotalWatts = data.TotalWatts; // for guage
-                        },
-                        error: function (data) {
-                            console.log('Error:', data);
-                        }
-                    });
-              
-            }
-            else {
-  
                 alert('Room and Date cannot be empty');
             }
-   
+
         });
     });
 
