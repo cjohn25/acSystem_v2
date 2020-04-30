@@ -202,9 +202,7 @@ class PagesController extends Controller
         $RoomDataCollection = Arr::pluck($collectionSample, 'id'); 
         $getData =Data_reading::where('room_ID','=',$RoomDataCollection)->orderBy('data_reading.created_at','desc')->get();  
 
-        // $getTotalPowerFromGETDATA =$getData->sum('power'); 
-        // $getTotalVoltageFromGETDATA = $getData->sum('voltage');
-
+         
         //Days and Hours
         $collectionByDaysAndHours = DB::table('data_reading')
         ->selectRaw('data_reading.*,created_at') 

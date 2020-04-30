@@ -124,19 +124,24 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#checkData').show();
-        $('#summaryShow').hide();
-        $('#list_table_json').hide();
+
+        HideOrDisableComponent();
+        getChart();
+        var getTotalVoltage = 0;
+        var getTotalTotalWatts = 0;
+        var confirmation = false;
+ 
         $(function () {
             $("#datepicker").datepicker(); 
         });
+
         //Per hour Average
         var getDataforChart = []; 
         document.getElementById("myChartBarContainer").innerHTML = '&nbsp;';
         document.getElementById("myChartBarContainer").innerHTML = '<canvas id="myChartBar"></canvas>';
         var ctxbar = document.getElementById("myChartBar").getContext("2d"); 
-        function myChartDisplayBar(data, getDateFiltered) {
-            console.log(getDateFiltered);
+        
+        function myChartDisplayBar(data, getDateFiltered) { 
             confirmation = true; 
             var myChart = new Chart(ctxbar, {
                 type: 'bar',
@@ -164,8 +169,7 @@
             });
         }
 
-
-
+        //Per Day Average 
         document.getElementById("myChartContainer").innerHTML = '&nbsp;';
         document.getElementById("myChartContainer").innerHTML = '<canvas id="myChart"></canvas>';
         var ctx = document.getElementById("myChart").getContext("2d");
@@ -198,57 +202,12 @@
             });
         }
 
-        //Weekly Average
-
-        // function showChart() {
-        //     $.ajaxSetup({
-        //         headers: {
-        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //         }
-        //     });
-        //     // var rID = $('#roomid').val();
-        //     $.ajax({
-        //         url: '/summary/data/',
-        //         type: "POST",
-        //         dataType: 'json',
-        //         success: function (data) {
-        //             console.log(data);
-        //         },
-        //         error: function (data) {
-        //             console.log('Error:', data);
-        //         }
-        //     });
-        // }
-
 
         google.charts.load('current', {
             'packages': ['gauge']
         });
         google.charts.setOnLoadCallback();
-        // function drawGauge(response) {
-        //     var num = 0;
-        //     num = parseInt(response) != NaN ? parseInt(response) : 0;
-        //     var data = google.visualization.arrayToDataTable([
-        //         ['Label', 'Value'],
-        //         ['Total Watts', num]
-        //     ]);
-        //     var options = {
-        //         min: 0,
-        //         max: 9000,
-        //         yellowFrom: 7000,
-        //         yellowTo: 7999,
-        //         redFrom: 8000,
-        //         redTo: 9000,
-        //         minorTicks: 5
-        //     };
-        //     var chart = new google.visualization.Gauge(document.getElementById('gauge_div'));
-        //     chart.draw(data, options);
-        // }
-
-        var getTotalVoltage = 0;
-
-        var getTotalTotalWatts = 0;
-        var confirmation = false;
+  
 
         setInterval(function () {
             if (confirmation == true) {
@@ -257,13 +216,14 @@
             } else {}
         }, 5000);
 
-        // function callback(response, response1) {
-        //     drawGauge(response);
 
-        //     // drawGauge2(response1);
-        // }
-        getChart();
 
+        function HideOrDisableComponent(){
+            $('#Print').prop('disabled', true);
+            $('#checkData').show();
+            $('#summaryShow').hide();
+            $('#list_table_json').hide();
+        }
 
         function getChart() {
             var selOpts = "";
@@ -318,9 +278,7 @@
                 console.log("room" + getRoom);
                 var getDateFiltered1 = []; 
                 var array = new Array();
-                array = datepick.split('-');
-                // var newDate = (array[0] + "." + array[1]);
-
+                array = datepick.split('-'); 
                 var event_data = '';
                 $.ajaxSetup({
                     headers: {
@@ -458,28 +416,4 @@
             });
         }
 </script>
-@endsection
-{{-- 
-
-<p>Click the button to display the name of this month.</p>
-
-<button onclick="myFunction()">Try it</button>
-
-<p id="demo"></p>
-
-<script>
-function myFunction() {
-  var day = new Array();
-  day[1] = "Monday";
-  day[2] = "Tuesday";
-  day[3] = "Wednesday";
-  day[4] = "Thrusday";
-  day[5] = "Friday";
-  day[6] = "Saturday";
-  day[7] = "Sunday"; 
-
-  var d = new Date();
-  var n = day[d.getDay()];
-  document.getElementById("demo").innerHTML = n;
-}
-</script> --}}
+@endsection 
