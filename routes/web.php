@@ -88,3 +88,5 @@ Route::group(['middleware' => ['auth', 'admin']], function()
   Route::resource('setTime','calendarController')->middleware('auth');
   //getData timeCalendar
   Route::get('setTime/getEdit/{id}','calendarController@getEdit')->middleware('auth');//edit generate data
+  //pdf
+  Route::post('/customer/print-pdf', 'Admin\PDFController@printPDF');

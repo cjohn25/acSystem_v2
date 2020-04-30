@@ -204,8 +204,7 @@ class RoomController extends Controller
     }
     public function searchRoom(Request $request)
     { 
-        try{
-
+        try{ 
             $search = $request->input('search');
             $data = Room::all()->where('status','=',true);
                   $results =  Room::where('roomName', 'like', '%' . $search . '%')

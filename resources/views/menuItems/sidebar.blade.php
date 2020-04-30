@@ -69,7 +69,7 @@
 			        </ul>
 			    </li>
 			    <li>
-			        <a href="#"><i class="entypo-publish"></i>REPORT</a>
+			        <a href="#"><i class="entypo-publish"></i><span>REPORT</span></a>
 			        <ul>
 			            <li>
 			                <a href="/dataReading"><span>Activity Logs</span></a>
@@ -80,7 +80,7 @@
 			        </ul>
 			    </li>
 			    <li>
-			        <a href="#"><i class="entypo-calendar"></i>CALENDARS</a>
+			        <a href="#"><i class="entypo-calendar"></i><span>CALENDARS</span></a>
 			        <ul>
 			            <li>
 			                <a href="/events"><span>Events</span></a>

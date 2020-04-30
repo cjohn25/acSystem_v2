@@ -179,6 +179,7 @@ return [
         Yajra\DataTables\DataTablesServiceProvider::class,
         Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
     ],
 
     /*
@@ -234,6 +235,7 @@ return [
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'Lava' => Khill\Lavacharts\Laravel\LavachartsFacade::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
     ],
 
 ];
