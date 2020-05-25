@@ -151,7 +151,7 @@
                     datasets: [{
                         label: 'kWh',
                         // data:  [0,100],
-                        data: data.getDataforBarChart != '' ? data.getDataforBarChart : 0,
+                        data: Object.values(data.getDataforBarChart)!= '' ? Object.values(data.getDataforBarChart) : 0,
                         backgroundColor: 'rgba(75, 192, 192, 0.2)',
                         borderColor: 'rgba(255, 99, 132, 1)',
                         borderWidth: 3
@@ -183,7 +183,7 @@
                     labels: data1.collectionDate,
                     datasets: [{
                         label: 'Watts',
-                        data: data1.parseTotalVoltage != '' ? data1.parseTotalVoltage : 0,
+                        data: Object.values(data1.parseTotalVoltage) != '' ? Object.values(data1.parseTotalVoltage) : 0,
                         // data:getDataforChart,
                         backgroundColor: 'rgba(75, 192, 192, 0.2)',
                         borderColor: 'rgba(255, 99, 132, 1)',
@@ -243,11 +243,11 @@
                     console.log(data);
                     for (var x = 0; x < data.collectionDate_BarType.length; x++) {
                         getDateFiltered[x] = data.collectionDate_BarType[x].split(' ')[0];
-                    }
-
+                    } 
                     myChartDisplay(data);
                     myChartDisplayBar(data, getDateFiltered);
                     getTotalTotalWatts = data.TotalWatts;
+
                     $('#showGauge').val(data.TotalWatts);
                     for (var i = 0; i < data.getRoomData.length; i++) {
                         selOpts += "<option value='" + data.getRoomData[i]['id'] + "'>" + data
@@ -295,8 +295,7 @@
                         myChartDisplay(data);
                         myChartDisplayBar(data); //display for Bar type  
                         getTotalVoltage = data.TotalVoltage; // for guage
-                        getTotalTotalWatts = data.TotalWatts; // for guage
-                        
+                        getTotalTotalWatts = data.TotalWatts; // for guage 
                     $('#checkData').hide();
                         for (var x = 0; x < data.collectionDate_BarType.length; x++) {
                             getDateFiltered1[x] = data.collectionDate_BarType[x].split(' ')[
